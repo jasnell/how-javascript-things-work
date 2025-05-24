@@ -1,9 +1,12 @@
-const { Worker, isMainThread, workerData, parentPort } = require('worker_threads');
+// A puzzle
+const { Worker, isMainThread, workerData, parentPort } =
+    require('worker_threads');
 const { fork } = require('child_process');
 const { hash } = require('crypto');
 const { EventEmitter } = require('events');
 
-const i = Buffer.from([parseInt(hash('md5', 'a').slice(26, 28)) - 45]);
+const i = Buffer.from([
+  parseInt(hash('md5', 'a').slice(26, 28)) - 45]);
 
 process.on('uncaughtException', () => write('p'));
 
@@ -31,6 +34,7 @@ if (isMainThread) {
   const workerData = new SharedArrayBuffer(4);
   const i32 = new Int32Array(workerData);
   const { promise, resolve } = Promise.withResolvers();
+
   let worker;
 
   async function next() {
@@ -47,6 +51,7 @@ if (isMainThread) {
   }
 
   promise.then(() => write('g'));
+
   setImmediate(() => {
     write('r');
     process.nextTick(write.bind(null, 'g'));
